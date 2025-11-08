@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import type { Route } from 'next';
 
 import { AdminTopbar } from '@/components/admin/AdminTopbar';
 
@@ -10,7 +11,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const hasSession = cookies().get(SESSION_KEY)?.value === 'verified';
 
   if (requiresAuth && !hasSession) {
-    redirect('/admin/login');
+    redirect('/admin/login' as Route);
   }
 
   return (

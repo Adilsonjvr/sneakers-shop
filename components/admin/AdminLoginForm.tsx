@@ -1,7 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import type { Route } from 'next';
 import { useState } from 'react';
+
+const DASHBOARD_ROUTE = '/admin/dashboard' as Route;
 
 export function AdminLoginForm({ passcodeConfigured }: { passcodeConfigured: boolean }) {
   const router = useRouter();
@@ -23,7 +26,7 @@ export function AdminLoginForm({ passcodeConfigured }: { passcodeConfigured: boo
         const payload = await response.json().catch(() => ({}));
         throw new Error(payload.error ?? 'Código inválido');
       }
-      router.replace('/admin/dashboard');
+      router.replace(DASHBOARD_ROUTE);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro inesperado');

@@ -2,9 +2,14 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import type { Route } from 'next';
 import { useState, useTransition } from 'react';
 
-const navLinks = [{ href: '/admin/dashboard', label: 'Dashboard' }];
+const navLinks: { href: Route; label: string }[] = [
+  { href: '/admin/dashboard' as Route, label: 'Dashboard' },
+];
+
+const LOGIN_ROUTE = '/admin/login' as Route;
 
 export function AdminTopbar({ showSignOut }: { showSignOut: boolean }) {
   const router = useRouter();
@@ -21,7 +26,7 @@ export function AdminTopbar({ showSignOut }: { showSignOut: boolean }) {
         setError(payload.error ?? 'Erro ao terminar sessão');
         return;
       }
-      router.push('/admin/login');
+      router.push(LOGIN_ROUTE);
       router.refresh();
     });
   };
