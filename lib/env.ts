@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
-  STRIPE_SECRET_KEY: z.string().min(1),
+  DATABASE_URL: z.string().url().optional(),
+  STRIPE_SECRET_KEY: z.string().min(1).optional(),
   STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
   NEXT_PUBLIC_BASE_URL: z.string().url().optional(),
 });
@@ -13,3 +13,5 @@ export const env = envSchema.parse({
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
 });
+
+export const hasDatabaseUrl = Boolean(env.DATABASE_URL);
