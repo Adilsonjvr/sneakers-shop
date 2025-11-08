@@ -23,7 +23,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const filteredRelated = related.data.filter((item) => item.id !== product.id);
 
-  const showroomRoute: Route = '/';
+  const showroomRoute = '/' as Route;
 
   return (
     <div className="flex flex-col gap-6">
