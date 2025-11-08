@@ -13,11 +13,23 @@ type StorePageProps = {
 
 export default async function StorePage({ searchParams }: StorePageProps) {
   const mode = (searchParams?.mode as ProductMode | undefined) ?? 'showroom';
+  let errorMessage: string | undefined;
+  type ProductsPayload = Awaited<ReturnType<typeof fetchProducts>>;
+  let initialData: ProductsPayload = {
+    data: [],
+    pageInfo: { hasNextPage: false, nextCursor: undefined },
+  };
 
-  const initialData = await fetchProducts({
-    mode,
-    limit: 12,
-  });
+  try {
+    initialData = await fetchProducts({
+      mode,
+      limit: 12,
+    });
+  } catch (error) {
+    console.error('Falha ao carregar catálogo', error);
+    errorMessage =
+      'Não foi possível ligar à base de dados. Define DATABASE_URL acessível no projeto Vercel.';
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -31,7 +43,11 @@ export default async function StorePage({ searchParams }: StorePageProps) {
         </p>
       </section>
       <Suspense fallback={<div className="text-white/60">A carregar catálogo...</div>}>
-        <ProductExplorer initialData={initialData} initialMode={mode} />
+        <ProductExplorer
+          initialData={initialData}
+          initialMode={mode}
+          errorMessage={errorMessage}
+        />
       </Suspense>
     </div>
   );

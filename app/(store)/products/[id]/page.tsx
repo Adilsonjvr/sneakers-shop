@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { ProductDetail } from '@/components/products/ProductDetail';
 import { fetchProductById, fetchProducts } from '@/lib/products';
+import type { ProductResponse } from '@/lib/products';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,16 +13,37 @@ type ProductPageProps = {
 };
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await fetchProductById(params.id);
+  let productError: string | undefined;
+  let product: ProductResponse | null = null;
+
+  try {
+    product = await fetchProductById(params.id);
+  } catch (error) {
+    console.error('Falha ao carregar produto', error);
+    productError = 'Não foi possível ligar à base de dados para carregar este produto.';
+  }
 
   if (!product) {
+    if (productError) {
+      return (
+        <div className="glass-panel mx-auto mt-10 max-w-2xl px-6 py-8 text-center text-white">
+          <p>{productError}</p>
+        </div>
+      );
+    }
     notFound();
   }
 
-  const related = await fetchProducts({
-    limit: 6,
-    modelLine: product.modelLine,
-  });
+  type ProductsPayload = Awaited<ReturnType<typeof fetchProducts>>;
+  let related: ProductsPayload = { data: [], pageInfo: { hasNextPage: false } };
+  try {
+    related = await fetchProducts({
+      limit: 6,
+      modelLine: product.modelLine,
+    });
+  } catch (error) {
+    console.error('Falha ao carregar produtos relacionados', error);
+  }
 
   const filteredRelated = related.data.filter((item) => item.id !== product.id);
 

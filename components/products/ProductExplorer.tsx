@@ -11,6 +11,7 @@ import { ProductCard } from '@/components/products/ProductCard';
 type ProductExplorerProps = {
   initialData: { data: ProductResponse[] };
   initialMode: ProductMode;
+  errorMessage?: string;
 };
 
 const modeOptions: { label: string; value: ProductMode }[] = [
@@ -36,7 +37,7 @@ const useDebouncedValue = <T,>(value: T, delay = 300) => {
   return debounced;
 };
 
-export function ProductExplorer({ initialData, initialMode }: ProductExplorerProps) {
+export function ProductExplorer({ initialData, initialMode, errorMessage }: ProductExplorerProps) {
   const [mode, setMode] = useState<ProductMode>(initialMode);
   const [modelLine, setModelLine] = useState<ModelLine | 'all'>('all');
   const [search, setSearch] = useState('');
@@ -97,6 +98,11 @@ export function ProductExplorer({ initialData, initialMode }: ProductExplorerPro
   return (
     <div className="flex flex-col gap-6">
       <div className="glass-panel flex flex-col gap-4 px-6 py-5">
+        {errorMessage && (
+          <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            {errorMessage}
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-4">
           {modeOptions.map((option) => (
             <button
