@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { ProductDetail } from '@/components/products/ProductDetail';
 import { fetchProductById, fetchProducts } from '@/lib/products';
 
+export const dynamic = 'force-dynamic';
+
 type ProductPageProps = {
   params: { id: string };
 };

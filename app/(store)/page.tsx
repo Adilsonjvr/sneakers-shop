@@ -3,6 +3,8 @@ import { Suspense } from 'react';
 import { ProductExplorer } from '@/components/products/ProductExplorer';
 import { fetchProducts, ProductMode } from '@/lib/products';
 
+export const dynamic = 'force-dynamic';
+
 type StorePageProps = {
   searchParams?: {
     mode?: ProductMode;

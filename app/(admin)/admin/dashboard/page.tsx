@@ -6,6 +6,8 @@ import { StockBreakdown } from '@/components/dashboard/StockBreakdown';
 import { getDashboardMetrics } from '@/lib/services/metrics';
 import { formatCurrency, formatPercent } from '@/lib/utils/format';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const metrics = await getDashboardMetrics();
   const sparkline = metrics.lastSevenDays.map((point) => point.amount);
