@@ -1,10 +1,10 @@
 import { PaymentStatus, Prisma, ReservationStatus } from '@prisma/client';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import crypto from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { stripe } from '@/lib/stripe';
+import { getStripeClient } from '@/lib/stripe';
 import { AddressInput, CheckoutItemInput, createOrderDraft } from '@/lib/services/checkout';
 import { prisma } from '@/lib/prisma';
 import {
@@ -93,6 +93,16 @@ export async function POST(request: NextRequest) {
       throw new IdempotencyConflictError();
     }
 
+    let stripeClient: Stripe;
+    try {
+      stripeClient = getStripeClient();
+    } catch {
+      return NextResponse.json(
+        { error: 'Stripe não configurado neste ambiente' },
+        { status: 503 },
+      );
+    }
+
     const draft = await createOrderDraft({
       ...parsed.data,
       billingAddress: parsed.data.billingAddress ?? parsed.data.shippingAddress,
@@ -101,7 +111,7 @@ export async function POST(request: NextRequest) {
 
     const amountInCents = Math.round(draft.totals.total.toNumber() * 100);
 
-    const paymentIntent = await stripe.paymentIntents.create(
+    const paymentIntent = await stripeClient.paymentIntents.create(
       {
         amount: amountInCents,
         currency: 'eur',
