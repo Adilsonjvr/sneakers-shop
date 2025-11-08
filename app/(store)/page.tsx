@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { ProductExplorer } from '@/components/products/ProductExplorer';
+import { hasDatabaseUrl } from '@/lib/env';
 import { fetchProducts, ProductMode } from '@/lib/products';
 
 export const dynamic = 'force-dynamic';
@@ -20,15 +21,19 @@ export default async function StorePage({ searchParams }: StorePageProps) {
     pageInfo: { hasNextPage: false, nextCursor: undefined },
   };
 
-  try {
-    initialData = await fetchProducts({
-      mode,
-      limit: 12,
-    });
-  } catch (error) {
-    console.error('Falha ao carregar catálogo', error);
-    errorMessage =
-      'Não foi possível ligar à base de dados. Define DATABASE_URL acessível no projeto Vercel.';
+  if (!hasDatabaseUrl) {
+    errorMessage = 'DATABASE_URL não configurado. Define uma base de dados remota antes de continuar.';
+  } else {
+    try {
+      initialData = await fetchProducts({
+        mode,
+        limit: 12,
+      });
+    } catch (error) {
+      console.error('Falha ao carregar catálogo', error);
+      errorMessage =
+        'Não foi possível ligar à base de dados. Define DATABASE_URL acessível no projeto Vercel.';
+    }
   }
 
   return (

@@ -3,6 +3,7 @@ import { DropsWidget } from '@/components/dashboard/DropsWidget';
 import { InventoryAlerts } from '@/components/dashboard/InventoryAlerts';
 import { RecentOrdersTable } from '@/components/dashboard/RecentOrdersTable';
 import { StockBreakdown } from '@/components/dashboard/StockBreakdown';
+import { hasDatabaseUrl } from '@/lib/env';
 import { DashboardMetrics, getDashboardMetrics } from '@/lib/services/metrics';
 import { formatCurrency, formatPercent } from '@/lib/utils/format';
 
@@ -23,11 +24,15 @@ export default async function DashboardPage() {
   let metrics = fallbackMetrics;
   let errorMessage: string | undefined;
 
-  try {
-    metrics = await getDashboardMetrics();
-  } catch (error) {
-    console.error('Falha ao carregar métricas do dashboard', error);
-    errorMessage = 'Dashboard offline (BD indisponível). Verifica DATABASE_URL no ambiente.';
+  if (!hasDatabaseUrl) {
+    errorMessage = 'DATABASE_URL não configurado. Dashboard depende de uma base de dados ativa.';
+  } else {
+    try {
+      metrics = await getDashboardMetrics();
+    } catch (error) {
+      console.error('Falha ao carregar métricas do dashboard', error);
+      errorMessage = 'Dashboard offline (BD indisponível). Verifica DATABASE_URL no ambiente.';
+    }
   }
   const sparkline = metrics.lastSevenDays.map((point) => point.amount);
   const last = sparkline.at(-1) ?? 0;

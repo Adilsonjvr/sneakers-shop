@@ -3,6 +3,7 @@ import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ProductDetail } from '@/components/products/ProductDetail';
+import { hasDatabaseUrl } from '@/lib/env';
 import { fetchProductById, fetchProducts } from '@/lib/products';
 import type { ProductResponse } from '@/lib/products';
 
@@ -16,11 +17,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   let productError: string | undefined;
   let product: ProductResponse | null = null;
 
-  try {
-    product = await fetchProductById(params.id);
-  } catch (error) {
-    console.error('Falha ao carregar produto', error);
-    productError = 'Não foi possível ligar à base de dados para carregar este produto.';
+  if (!hasDatabaseUrl) {
+    productError = 'DATABASE_URL não configurado. Não é possível carregar o produto.';
+  } else {
+    try {
+      product = await fetchProductById(params.id);
+    } catch (error) {
+      console.error('Falha ao carregar produto', error);
+      productError = 'Não foi possível ligar à base de dados para carregar este produto.';
+    }
   }
 
   if (!product) {
@@ -36,13 +41,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   type ProductsPayload = Awaited<ReturnType<typeof fetchProducts>>;
   let related: ProductsPayload = { data: [], pageInfo: { hasNextPage: false } };
-  try {
-    related = await fetchProducts({
-      limit: 6,
-      modelLine: product.modelLine,
-    });
-  } catch (error) {
-    console.error('Falha ao carregar produtos relacionados', error);
+  if (hasDatabaseUrl) {
+    try {
+      related = await fetchProducts({
+        limit: 6,
+        modelLine: product.modelLine,
+      });
+    } catch (error) {
+      console.error('Falha ao carregar produtos relacionados', error);
+    }
   }
 
   const filteredRelated = related.data.filter((item) => item.id !== product.id);
