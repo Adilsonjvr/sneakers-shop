@@ -61,11 +61,11 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ1,
     price: 195,
     skuPrefix: 'AJ1-CHICAGO-1985',
-    heroImageUrl: '/images/products/aj1-chicago-1.png',
+    heroImageUrl: '/images/products/aj1-chicago-3.png',
     galleryImages: [
-      '/images/products/aj1-chicago-1.png',
-      '/images/products/aj1-chicago-2.png',
       '/images/products/aj1-chicago-3.png',
+      '/images/products/aj1-chicago-2.png',
+      '/images/products/aj1-chicago-1.png',
       '/images/products/aj1-chicago-4.png',
     ],
     baseStock: 14,
@@ -87,7 +87,6 @@ const productDefinitions: ProductDefinition[] = [
       '/images/products/aj1-hyper-royal-2.png',
       '/images/products/aj1-hyper-royal-3.png',
       '/images/products/aj1-hyper-royal-4.png',
-      '/images/products/aj1-hyper-royal-5.png',
     ],
     baseStock: 12,
     stockBySize: {
