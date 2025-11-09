@@ -142,8 +142,13 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ11,
     price: 235,
     skuPrefix: 'AJ11-JUBILEE-25',
-    heroImageUrl: '/images/products/aj11-jubilee.svg',
-    galleryImages: ['/images/products/aj11-jubilee.svg'],
+    heroImageUrl: '/images/products/aj11-jubilee-1.png',
+    galleryImages: [
+      '/images/products/aj11-jubilee-1.png',
+      '/images/products/aj11-jubilee-2.png',
+      '/images/products/aj11-jubilee-3.png',
+      '/images/products/aj11-jubilee-4.png',
+    ],
     isDrop: true,
     drop: {
       startInHours: 168,
