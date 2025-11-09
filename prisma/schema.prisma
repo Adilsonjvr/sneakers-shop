@@ -207,6 +207,8 @@ model Product {
   /// Bloco de storytelling (HTML sanitizado no app)
   storyHtml     String?
   materials     String?
+  heroImageUrl  String?
+  galleryImages Json?
   status        ProductStatus   @default(ACTIVE)
 
   /// Flags e ligações a "drop" via tabela Drop

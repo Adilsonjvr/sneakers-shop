@@ -2,6 +2,7 @@
 
 import { AvailabilityState } from '@prisma/client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -43,6 +44,17 @@ export function ProductCard({ product }: { product: ProductResponse }) {
       className="glass-panel relative flex flex-col gap-4 p-5 shadow-card"
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-black">
+        {product.heroImageUrl ? (
+          <Image
+            src={product.heroImageUrl}
+            alt={product.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-brand/20 to-black" />
+        )}
         <div className="absolute inset-0 flex flex-col justify-between p-4">
           {product.isDrop && (
             <span className="w-fit rounded-full bg-brand px-3 py-1 text-xs uppercase tracking-[0.3em]">
@@ -54,9 +66,6 @@ export function ProductCard({ product }: { product: ProductResponse }) {
               A iniciar {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
             </span>
           )}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-32 w-32 rounded-full border border-white/20" />
         </div>
       </div>
 

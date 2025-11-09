@@ -40,6 +40,8 @@ const productSelect = Prisma.validator<Prisma.ProductSelect>()({
   description: true,
   storyHtml: true,
   materials: true,
+  heroImageUrl: true,
+  galleryImages: true,
   status: true,
   isDrop: true,
   createdAt: true,
@@ -63,6 +65,8 @@ export type ProductResponse = {
   description: string | null;
   storyHtml: string | null;
   materials: string | null;
+  heroImageUrl: string | null;
+  galleryImages: string[];
   status: ProductStatus;
   isDrop: boolean;
   priceRange: { min: number; max: number };
@@ -150,6 +154,10 @@ const serializeProduct = (record: ProductRecord): ProductResponse => {
     description: record.description,
     storyHtml: record.storyHtml,
     materials: record.materials,
+    heroImageUrl: record.heroImageUrl,
+    galleryImages: Array.isArray(record.galleryImages)
+      ? (record.galleryImages as string[])
+      : [],
     status: record.status,
     isDrop: record.isDrop,
     priceRange,
