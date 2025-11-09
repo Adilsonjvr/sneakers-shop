@@ -111,8 +111,15 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ4,
     price: 225,
     skuPrefix: 'AJ4-MILITARY-BLK',
-    heroImageUrl: '/images/products/aj4-military-black.svg',
-    galleryImages: ['/images/products/aj4-military-black.svg'],
+    heroImageUrl: '/images/products/aj4-military-black-1.png',
+    galleryImages: [
+      '/images/products/aj4-military-black-1.png',
+      '/images/products/aj4-military-black-2.png',
+      '/images/products/aj4-military-black-3.png',
+      '/images/products/aj4-military-black-4.png',
+      '/images/products/aj4-military-black-5.png',
+      '/images/products/aj4-military-black-6.png',
+    ],
     isDrop: true,
     drop: {
       startInHours: 72,
