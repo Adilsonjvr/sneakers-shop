@@ -19,6 +19,7 @@ const availabilityCopy: Record<AvailabilityState, string> = {
 
 export function ProductCard({ product }: { product: ProductResponse }) {
   const [showSizes, setShowSizes] = useState(false);
+  const [spotlight, setSpotlight] = useState({ x: 50, y: 50, active: false });
   const { addItem } = useCart();
 
   const sortedVariants = product.variants
@@ -42,7 +43,23 @@ export function ProductCard({ product }: { product: ProductResponse }) {
     <motion.article
       layout
       className="glass-panel relative flex flex-col gap-4 p-5 shadow-card"
+      onPointerMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        setSpotlight({
+          x: ((event.clientX - rect.left) / rect.width) * 100,
+          y: ((event.clientY - rect.top) / rect.height) * 100,
+          active: true,
+        });
+      }}
+      onPointerLeave={() => setSpotlight((prev) => ({ ...prev, active: false }))}
     >
+      <div
+        className="pointer-events-none absolute inset-0 hidden rounded-[inherit] transition-opacity duration-300 md:block"
+        style={{
+          opacity: spotlight.active ? 1 : 0,
+          background: `radial-gradient(circle at ${spotlight.x}% ${spotlight.y}%, rgba(255,255,255,0.18), transparent 55%)`,
+        }}
+      />
       <ProductHeroImage
         src={product.heroImageUrl}
         alt={product.name}
