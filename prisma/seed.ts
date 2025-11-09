@@ -76,8 +76,13 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ1,
     price: 205,
     skuPrefix: 'AJ1-HYPER-ROYAL',
-    heroImageUrl: '/images/products/aj1-hyper-royal.svg',
-    galleryImages: ['/images/products/aj1-hyper-royal.svg'],
+    heroImageUrl: '/images/products/aj1-hyper-royal-1.jpg',
+    galleryImages: [
+      '/images/products/aj1-hyper-royal-1.jpg',
+      '/images/products/aj1-hyper-royal-2.jpg',
+      '/images/products/aj1-hyper-royal-3.jpg',
+      '/images/products/aj1-hyper-royal-4.jpg',
+    ],
     baseStock: 12,
     stockBySize: {
       38: 8,
