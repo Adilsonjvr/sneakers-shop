@@ -1,0 +1,18 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="600" fill="transparent"/>
+  <g filter="url(#shadow)">
+    <path d="M85 360C120 300 230 260 390 250L600 240C660 235 730 205 780 220C810 245 830 285 825 330C818 390 770 435 702 445L240 465C160 470 105 420 85 360Z" fill="#C1121F"/>
+    <path d="M150 360C190 315 285 300 410 295L625 288C675 286 720 262 752 250C765 271 770 307 760 335C743 383 700 410 655 415L250 430C205 432 170 400 150 360Z" fill="#F7F5F2"/>
+    <path d="M575 320C560 345 525 370 470 380C370 395 330 402 210 405L202 360C330 330 420 320 575 320Z" fill="#0D0D0D"/>
+    <path d="M505 275L535 240L650 234C660 246 664 268 660 284C622 295 580 300 505 275Z" fill="#0D0D0D"/>
+    <path d="M220 382C295 360 360 350 520 342L528 366C400 394 330 400 220 400Z" fill="#D9462E"/>
+  </g>
+  <defs>
+    <filter id="shadow" x="40" y="180" width="780" height="320" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feOffset dy="20"/>
+      <feGaussianBlur stdDeviation="25" result="blur"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+    </filter>
+  </defs>
+</svg>

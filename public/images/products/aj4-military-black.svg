@@ -1,0 +1,17 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="600" fill="transparent"/>
+  <g filter="url(#shadow)">
+    <path d="M90 360C125 300 250 270 420 260L640 250C700 248 770 220 800 240C830 260 840 310 820 350C790 408 735 435 665 442L245 460C170 465 110 420 90 360Z" fill="#F7F5F2"/>
+    <path d="M170 360C215 312 320 300 460 296L670 292C710 291 750 272 770 258C778 278 778 309 768 335C742 396 700 412 635 416L240 432C205 433 180 408 170 360Z" fill="#0D0D0D" opacity="0.9"/>
+    <path d="M300 340C390 322 480 318 620 318L630 344C520 370 430 378 300 378Z" fill="#9FA4AE"/>
+    <path d="M505 270L540 236L690 232C700 246 703 268 698 284C652 298 590 296 505 270Z" fill="#1B1B1B"/>
+  </g>
+  <defs>
+    <filter id="shadow" x="40" y="190" width="780" height="310" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="25" result="blur"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0"/>
+      <feBlend in="SourceGraphic" in2="blur" mode="normal"/>
+    </filter>
+  </defs>
+</svg>
