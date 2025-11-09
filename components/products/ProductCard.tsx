@@ -62,7 +62,7 @@ export function ProductCard({ product }: { product: ProductResponse }) {
     >
       <audio ref={audioRef} src="/sound-holofote.mp3" preload="auto" className="hidden" />
       <div
-        className="pointer-events-none absolute -top-48 hidden h-72 w-36 -translate-x-1/2 rounded-full bg-gradient-to-b from-white/25 via-white/10 to-transparent blur-3xl transition-all duration-500 md:block"
+        className="pointer-events-none absolute -top-48 hidden h-80 w-40 -translate-x-1/2 rounded-full bg-gradient-to-b from-white/60 via-white/25 to-transparent blur-[90px] transition-all duration-500 md:block"
         style={{
           left: `${spotlight.x}%`,
           opacity: spotlight.active ? 1 : 0,
