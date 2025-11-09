@@ -9,7 +9,7 @@ import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
 
 import { SizeHeatmap } from './SizeHeatmap';
-import { TiltedHero } from './TiltedHero';
+import { ProductHeroImage } from './ProductHeroImage';
 
 const availabilityCopy: Record<AvailabilityState, string> = {
   IN_STOCK: 'Disponível',
@@ -43,10 +43,9 @@ export function ProductCard({ product }: { product: ProductResponse }) {
       layout
       className="glass-panel relative flex flex-col gap-4 p-5 shadow-card"
     >
-      <TiltedHero
+      <ProductHeroImage
         src={product.heroImageUrl}
         alt={product.name}
-        className="rounded-2xl"
         overlay={
           <>
             {product.isDrop && (

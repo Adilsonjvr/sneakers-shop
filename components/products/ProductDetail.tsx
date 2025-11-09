@@ -11,7 +11,7 @@ import { ProductResponse } from '@/lib/products';
 import { ColorwaySwitcher } from './ColorwaySwitcher';
 import { DropQueueJoiner } from './DropQueueJoiner';
 import { SizeHeatmap } from './SizeHeatmap';
-import { TiltedHero } from './TiltedHero';
+import { ProductHeroImage } from './ProductHeroImage';
 
 type ProductDetailProps = {
   product: ProductResponse;
@@ -43,7 +43,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
   return (
     <div className="glass-panel grid gap-10 p-8 md:grid-cols-2">
       <motion.div layout className="space-y-4">
-        <TiltedHero
+        <ProductHeroImage
           src={activeImage}
           alt={product.name}
           overlay={
