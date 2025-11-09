@@ -61,8 +61,8 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ1,
     price: 195,
     skuPrefix: 'AJ1-CHICAGO-1985',
-    heroImageUrl: '/images/products/aj1-chicago.jpg',
-    galleryImages: ['/images/products/aj1-chicago.jpg'],
+    heroImageUrl: '/images/products/aj1-chicago.svg',
+    galleryImages: ['/images/products/aj1-chicago.svg'],
     baseStock: 14,
   },
   {
@@ -76,8 +76,8 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ1,
     price: 205,
     skuPrefix: 'AJ1-HYPER-ROYAL',
-    heroImageUrl: '/images/products/aj1-hyper-royal.jpg',
-    galleryImages: ['/images/products/aj1-hyper-royal.jpg'],
+    heroImageUrl: '/images/products/aj1-hyper-royal.svg',
+    galleryImages: ['/images/products/aj1-hyper-royal.svg'],
     baseStock: 12,
     stockBySize: {
       38: 8,
@@ -101,8 +101,8 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ4,
     price: 225,
     skuPrefix: 'AJ4-MILITARY-BLK',
-    heroImageUrl: '/images/products/aj4-military-black.jpg',
-    galleryImages: ['/images/products/aj4-military-black.jpg'],
+    heroImageUrl: '/images/products/aj4-military-black.svg',
+    galleryImages: ['/images/products/aj4-military-black.svg'],
     isDrop: true,
     drop: {
       startInHours: 72,
@@ -125,8 +125,8 @@ const productDefinitions: ProductDefinition[] = [
     modelLine: ModelLine.AJ11,
     price: 235,
     skuPrefix: 'AJ11-JUBILEE-25',
-    heroImageUrl: '/images/products/aj11-jubilee.jpg',
-    galleryImages: ['/images/products/aj11-jubilee.jpg'],
+    heroImageUrl: '/images/products/aj11-jubilee.svg',
+    galleryImages: ['/images/products/aj11-jubilee.svg'],
     isDrop: true,
     drop: {
       startInHours: 168,
