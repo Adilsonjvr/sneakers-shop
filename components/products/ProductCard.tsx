@@ -3,7 +3,7 @@
 import { AvailabilityState } from '@prisma/client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
@@ -19,7 +19,8 @@ const availabilityCopy: Record<AvailabilityState, string> = {
 
 export function ProductCard({ product }: { product: ProductResponse }) {
   const [showSizes, setShowSizes] = useState(false);
-  const [spotlight, setSpotlight] = useState({ x: 50, y: 50, active: false });
+  const [spotlight, setSpotlight] = useState({ x: 50, active: false });
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { addItem } = useCart();
 
   const sortedVariants = product.variants
@@ -47,17 +48,26 @@ export function ProductCard({ product }: { product: ProductResponse }) {
         const rect = event.currentTarget.getBoundingClientRect();
         setSpotlight({
           x: ((event.clientX - rect.left) / rect.width) * 100,
-          y: ((event.clientY - rect.top) / rect.height) * 100,
           active: true,
         });
       }}
+      onPointerEnter={() => {
+        setSpotlight((prev) => ({ ...prev, active: true }));
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => undefined);
+        }
+      }}
       onPointerLeave={() => setSpotlight((prev) => ({ ...prev, active: false }))}
     >
+      <audio ref={audioRef} src="/sound-holofote.mp3" preload="auto" className="hidden" />
       <div
         className="pointer-events-none absolute inset-0 hidden rounded-[inherit] transition-opacity duration-300 md:block"
         style={{
           opacity: spotlight.active ? 1 : 0,
-          background: `radial-gradient(circle at ${spotlight.x}% ${spotlight.y}%, rgba(255,255,255,0.18), transparent 55%)`,
+          background: `radial-gradient(circle at ${spotlight.x}% 0%, rgba(255,255,255,0.2), transparent 60%)`,
+          transform: 'translateZ(0)',
+          mixBlendMode: 'screen',
         }}
       />
       <ProductHeroImage
