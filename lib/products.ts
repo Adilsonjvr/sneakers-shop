@@ -142,6 +142,15 @@ const serializeProduct = (record: ProductRecord): ProductResponse => {
     return acc;
   }, {});
 
+  const galleryImagesArray = Array.isArray(record.galleryImages)
+    ? (record.galleryImages as string[])
+    : [];
+  const normalizedGalleryImages = galleryImagesArray.length
+    ? galleryImagesArray
+    : record.heroImageUrl
+    ? [record.heroImageUrl]
+    : [];
+
   const now = new Date();
   const activeDrop = record.drops.find((drop) => drop.startAt <= now && (!drop.endAt || drop.endAt >= now));
 
@@ -155,9 +164,7 @@ const serializeProduct = (record: ProductRecord): ProductResponse => {
     storyHtml: record.storyHtml,
     materials: record.materials,
     heroImageUrl: record.heroImageUrl,
-    galleryImages: Array.isArray(record.galleryImages)
-      ? (record.galleryImages as string[])
-      : [],
+    galleryImages: normalizedGalleryImages,
     status: record.status,
     isDrop: record.isDrop,
     priceRange,

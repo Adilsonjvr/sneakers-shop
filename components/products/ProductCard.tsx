@@ -2,7 +2,6 @@
 
 import { AvailabilityState } from '@prisma/client';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -10,6 +9,7 @@ import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
 
 import { SizeHeatmap } from './SizeHeatmap';
+import { TiltedHero } from './TiltedHero';
 
 const availabilityCopy: Record<AvailabilityState, string> = {
   IN_STOCK: 'Disponível',
@@ -43,31 +43,25 @@ export function ProductCard({ product }: { product: ProductResponse }) {
       layout
       className="glass-panel relative flex flex-col gap-4 p-5 shadow-card"
     >
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-black">
-        {product.heroImageUrl ? (
-          <Image
-            src={product.heroImageUrl}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-brand/20 to-black" />
-        )}
-        <div className="absolute inset-0 flex flex-col justify-between p-4">
-          {product.isDrop && (
-            <span className="w-fit rounded-full bg-brand px-3 py-1 text-xs uppercase tracking-[0.3em]">
-              Drop
-            </span>
-          )}
-          {product.activeDrop && (
-            <span className="rounded-full bg-black/70 px-3 py-1 text-xs text-white/70">
-              A iniciar {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
-            </span>
-          )}
-        </div>
-      </div>
+      <TiltedHero
+        src={product.heroImageUrl}
+        alt={product.name}
+        className="rounded-2xl"
+        overlay={
+          <>
+            {product.isDrop && (
+              <span className="absolute left-4 top-4 rounded-full bg-brand px-3 py-1 text-xs uppercase tracking-[0.3em]">
+                Drop
+              </span>
+            )}
+            {product.activeDrop && (
+              <span className="absolute right-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs text-white/70">
+                A iniciar {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
+              </span>
+            )}
+          </>
+        }
+      />
 
       <div className="flex items-start justify-between gap-3">
         <div>

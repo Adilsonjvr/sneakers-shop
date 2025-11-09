@@ -3,7 +3,7 @@
 import { AvailabilityState } from '@prisma/client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
@@ -11,6 +11,7 @@ import { ProductResponse } from '@/lib/products';
 import { ColorwaySwitcher } from './ColorwaySwitcher';
 import { DropQueueJoiner } from './DropQueueJoiner';
 import { SizeHeatmap } from './SizeHeatmap';
+import { TiltedHero } from './TiltedHero';
 
 type ProductDetailProps = {
   product: ProductResponse;
@@ -20,6 +21,11 @@ type ProductDetailProps = {
 export function ProductDetail({ product, relatedColorways }: ProductDetailProps) {
   const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState(() => product.variants[0]);
+  const gallery = useMemo(() => {
+    if (product.galleryImages.length) return product.galleryImages;
+    return product.heroImageUrl ? [product.heroImageUrl] : [];
+  }, [product.galleryImages, product.heroImageUrl]);
+  const [activeImage, setActiveImage] = useState<string | undefined>(product.heroImageUrl ?? gallery[0]);
 
   const handleAddToBag = () => {
     if (!selectedVariant) return;
@@ -37,35 +43,30 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
   return (
     <div className="glass-panel grid gap-10 p-8 md:grid-cols-2">
       <motion.div layout className="space-y-4">
-        <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          {product.heroImageUrl ? (
-            <Image
-              src={product.heroImageUrl}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-brand/20 to-black" />
-          )}
-          {product.isDrop && (
-            <div className="absolute left-6 top-6 rounded-full bg-brand px-4 py-1 text-xs uppercase tracking-[0.3em]">
-              Drop exclusivo
-            </div>
-          )}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/60">{product.modelLine}</p>
-            <h2 className="font-display text-4xl font-semibold">{product.name}</h2>
-            <p className="text-white/70">{product.colorway}</p>
-          </div>
-        </div>
-        {product.galleryImages.length > 0 && (
-          <div className="grid grid-cols-4 gap-3">
-            {product.galleryImages.map((image) => (
-              <div key={image} className="relative h-20 overflow-hidden rounded-2xl border border-white/10">
-                <Image src={image} alt={`${product.name} detalhe`} fill className="object-cover" sizes="25vw" />
+        <TiltedHero
+          src={activeImage}
+          alt={product.name}
+          overlay={
+            product.isDrop && (
+              <div className="absolute left-6 top-6 rounded-full bg-brand px-4 py-1 text-xs uppercase tracking-[0.3em]">
+                Drop exclusivo
               </div>
+            )
+          }
+        />
+        {gallery.length > 0 && (
+          <div className="grid grid-cols-4 gap-3">
+            {gallery.map((image) => (
+              <button
+                key={image}
+                type="button"
+                onClick={() => setActiveImage(image)}
+                className={`relative h-20 overflow-hidden rounded-2xl border ${
+                  activeImage === image ? 'border-brand' : 'border-white/10'
+                } bg-white/5 transition`}
+              >
+                <Image src={image} alt={`${product.name} detalhe`} fill className="object-contain" sizes="25vw" />
+              </button>
             ))}
           </div>
         )}
