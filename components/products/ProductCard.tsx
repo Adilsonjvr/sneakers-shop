@@ -36,6 +36,7 @@ export function ProductCard({ product }: { product: ProductResponse }) {
       colorway: product.colorway,
       sizeLabel,
       price,
+      imageUrl: product.heroImageUrl ?? undefined,
     });
     setShowSizes(false);
   };

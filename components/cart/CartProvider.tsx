@@ -11,11 +11,13 @@ type CartItem = {
   colorway: string;
   sizeLabel: string;
   price: number;
+  imageUrl?: string;
 };
 
 type CartContextValue = {
   items: CartItem[];
   addItem: (item: CartItem) => void;
+  removeItem: (id: string) => void;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -27,6 +29,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     () => ({
       items,
       addItem: (item) => setItems((prev) => [...prev, { ...item, id: crypto.randomUUID() }]),
+      removeItem: (id) => setItems((prev) => prev.filter((item) => item.id !== id)),
     }),
     [items],
   );

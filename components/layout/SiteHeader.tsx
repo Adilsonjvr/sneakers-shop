@@ -5,6 +5,8 @@ import type { Route } from 'next';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 const HOME_ROUTE = '/' as Route;
+const BAG_ROUTE = '/bag' as Route;
+const ACCOUNT_ROUTE = '/account' as Route;
 
 const navLinks: Array<{ label: string; mode?: 'drop' | 'collector' }> = [
   { label: 'Showroom' },
@@ -44,8 +46,14 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <div className="text-xs font-medium uppercase tracking-[0.3em] text-white/60">
-          PT · EUR
+        <div className="flex items-center gap-4 text-xs font-medium uppercase tracking-[0.3em] text-white/60">
+          <span>PT · EUR</span>
+          <Link href={BAG_ROUTE} className="transition hover:text-white">
+            Sacola
+          </Link>
+          <Link href={ACCOUNT_ROUTE} className="transition hover:text-white">
+            Conta
+          </Link>
         </div>
       </div>
     </header>

@@ -37,6 +37,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
       colorway: product.colorway,
       sizeLabel: selectedVariant.sizeEu ? `EU ${selectedVariant.sizeEu.toFixed(1)}` : 'N/A',
       price: selectedVariant.price,
+      imageUrl: product.heroImageUrl ?? gallery[0] ?? undefined,
     });
   };
 
@@ -73,6 +74,14 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
       </motion.div>
 
       <div className="flex flex-col gap-6">
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-[0.4em] text-white/50">{product.modelLine}</p>
+          <h1 className="font-display text-4xl font-semibold text-white">{product.name}</h1>
+          <p className="text-sm uppercase tracking-[0.3em] text-white/60">{product.colorway}</p>
+          <p className="text-2xl font-semibold text-white">
+            {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : 'Consultar'}
+          </p>
+        </div>
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-white/50">Story</p>
           <div
