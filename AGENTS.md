@@ -30,3 +30,11 @@ Next.js (App Router) + Tailwind + Framer Motion, Prisma/PostgreSQL, Stripe (Paym
 ## Artefatos
 - `docs/PRD.md` (fonte da verdade).
 - `.env` com DATABASE_URL e chaves Stripe.
+
+## Progresso atual
+- Base Next.js + Tailwind configurada com App Router, fontes custom e microinterações (holofote + áudio).
+- Prisma já migrou o schema `Products/Variants/Inventory` e seed alimenta ~30 SKUs (AJ1/AJ4/AJ11) com galerias transparentes.
+- Endpoints `/api/products`, `/api/products/[id]`, `/api/checkout`, `/api/webhooks/stripe` estruturados; conexão ativa com Supabase Postgres.
+- UI de catálogo completa: PLP com quick-add/heatmap, PDP com storytelling, troca de colorway e integração com o carrinho.
+- Novas páginas conceituais: `bag` (resumo e remoção), `checkout` (formulários + métodos de pagamento simulados) e `account` (login opcional, pedidos, wishlist).
+- Deploy contínuo no Vercel (`sneakers-shop-jnnumqi5u...`) com commits frequentes e instruções no README.
