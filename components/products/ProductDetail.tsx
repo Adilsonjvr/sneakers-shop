@@ -11,12 +11,73 @@ import { ProductResponse } from '@/lib/products';
 
 import { ColorwaySwitcher } from './ColorwaySwitcher';
 import { DropQueueJoiner } from './DropQueueJoiner';
-import { SizeHeatmap } from './SizeHeatmap';
 import { ProductHeroImage } from './ProductHeroImage';
 
 type ProductDetailProps = {
   product: ProductResponse;
   relatedColorways: ProductResponse[];
+};
+
+const productInsights: Record<
+  string,
+  {
+    story: { pt: string; en: string };
+    highlights: Array<{ pt: string; en: string }>;
+  }
+> = {
+  'Air Jordan 1 Retro High OG "Chicago 1985"': {
+    story: {
+      pt: 'Reedição fiel do par usado por MJ na temporada de estreia — couro vermelho varsity, painéis brancos e swoosh preto com acabamento semi-brilhante.',
+      en: 'Faithful reissue of the pair MJ wore during his rookie season — varsity red leather, crisp white panels, and semi-gloss black swoosh.',
+    },
+    highlights: [
+      {
+        pt: 'Etiqueta Nike Air o.g. na língua em nylon espesso.',
+        en: 'Original Nike Air tongue tag on thick nylon.',
+      },
+      {
+        pt: 'Colar acolchoado com espuma exposta para look vintage.',
+        en: 'Padded collar with exposed foam for a vintage look.',
+      },
+      {
+        pt: 'Palmilha Ortholite personalizada com gráfico Wings.',
+        en: 'Custom Ortholite insole featuring the Wings graphic.',
+      },
+    ],
+  },
+  'Air Jordan 1 Retro High OG "Hyper Royal"': {
+    story: {
+      pt: 'Suede tingido com lavagem ácida inspirado nos murais de LA, combinado com swoosh cinzento e midsole off-white.',
+      en: 'Acid-washed suede inspired by LA murals, paired with grey swoosh and aged off-white midsole.',
+    },
+    highlights: [
+      { pt: 'Camurça premium com acabamento desbotado.', en: 'Premium suede with sun-faded finish.' },
+      { pt: 'Cordões em algodão cru e opção extra em azul.', en: 'Raw cotton laces plus alternate blue set.' },
+      { pt: 'Forro em malha respirável para uso diário.', en: 'Breathable mesh lining for daily wear.' },
+    ],
+  },
+  'Air Jordan 4 Retro "Military Black"': {
+    story: {
+      pt: 'Mistura do bloco “Military Blue” de 1989 com contrastes em preto, mantendo as asas em TPU e a entressola com unidade visível.',
+      en: 'Blend of the 1989 “Military Blue” blocking with black contrasts, keeping TPU wings and the visible Air midsole.',
+    },
+    highlights: [
+      { pt: 'Grade lateral reforçada com mesh de alto fluxo.', en: 'Reinforced side netting with high-flow mesh.' },
+      { pt: 'Palmilha com logo Flight bordado.', en: 'Flight embroidered logo on the insole.' },
+      { pt: 'Borracha herringbone para tração urbana.', en: 'Herringbone rubber outsole built for street grip.' },
+    ],
+  },
+  'Air Jordan 11 Retro "Jubilee 25th"': {
+    story: {
+      pt: 'Celebra os 25 anos do AJ11 com verniz profundo, debrum metálico e logotipo “Jordan” em cada ilhó.',
+      en: 'Celebrates 25 years of AJ11 with rich patent leather, metallic piping, and “Jordan” lettering across the eyelets.',
+    },
+    highlights: [
+      { pt: 'Cabedal em mesh balístico preto.', en: 'Black ballistic mesh upper.' },
+      { pt: 'Placa de fibra de carbono exposta na sola.', en: 'Exposed carbon-fiber plate underfoot.' },
+      { pt: 'Detalhes cromados inspirados no protótipo original.', en: 'Chrome hits inspired by the original prototype.' },
+    ],
+  },
 };
 
 const copy = {
@@ -28,6 +89,7 @@ const copy = {
     selectSize: 'Selecionar tamanho',
     addToBag: 'Adicionar à sacola',
     dropBadge: 'Drop exclusivo',
+    highlights: 'Destaques',
   },
   en: {
     line: 'Line',
@@ -37,6 +99,7 @@ const copy = {
     selectSize: 'Select size',
     addToBag: 'Add to bag',
     dropBadge: 'Exclusive drop',
+    highlights: 'Highlights',
   },
 };
 
@@ -110,13 +173,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
             {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : t.priceFallback}
           </p>
         </div>
-        <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-white/50">{t.story}</p>
-          <div
-            className="prose prose-invert max-w-none text-white/80"
-            dangerouslySetInnerHTML={{ __html: product.storyHtml ?? '<p>Story forthcoming.</p>' }}
-          />
-        </div>
+        <StoryBlock product={product} lang={lang} copy={t} />
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
           <p className="text-xs uppercase tracking-[0.3em] text-white/50">{t.selectSize}</p>
@@ -151,13 +208,55 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
           </button>
         </div>
 
-        <SizeHeatmap sizeHeatmap={product.sizeHeatmap} />
         <ColorwaySwitcher options={relatedColorways} currentId={product.id} />
 
         {product.activeDrop && product.activeDrop.id && (
           <DropQueueJoiner dropId={product.activeDrop.id} />
         )}
       </div>
+    </div>
+  );
+}
+
+type StoryBlockProps = {
+  product: ProductResponse;
+  lang: 'pt' | 'en';
+  copy: typeof copy[keyof typeof copy];
+};
+
+function StoryBlock({ product, lang, copy: labels }: StoryBlockProps) {
+  const fallback = productInsights[product.name];
+  const storyHtml = product.storyHtml;
+  const highlights = fallback?.highlights ?? [];
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <p className="text-sm uppercase tracking-[0.3em] text-white/50">{labels.story}</p>
+        {storyHtml ? (
+          <div
+            className="prose prose-invert max-w-none text-white/80"
+            dangerouslySetInnerHTML={{ __html: storyHtml }}
+          />
+        ) : fallback ? (
+          <p className="text-white/70">{fallback.story[lang]}</p>
+        ) : (
+          <p className="text-white/60">Details coming soon.</p>
+        )}
+      </div>
+      {highlights.length > 0 && (
+        <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+          <p className="text-xs uppercase tracking-[0.3em] text-white/50">{labels.highlights}</p>
+          <ul className="mt-3 space-y-2 text-sm text-white/75">
+            {highlights.map((item) => (
+              <li key={item.en} className="flex gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-white/60" />
+                <span>{item[lang]}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

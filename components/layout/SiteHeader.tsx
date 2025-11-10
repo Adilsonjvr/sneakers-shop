@@ -44,7 +44,7 @@ export function SiteHeader() {
               strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-4 w-4"
+              className="h-4 w-4 sm:h-5 sm:w-5"
             >
               <path d="M6 8h12l-1 11H7z" />
               <path d="M9 8V6a3 3 0 0 1 6 0v2" />
@@ -58,7 +58,7 @@ export function SiteHeader() {
               strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-4 w-4"
+              className="h-4 w-4 sm:h-5 sm:w-5"
             >
               <circle cx="12" cy="8" r="3" />
               <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
@@ -80,11 +80,14 @@ function HeaderIconButton({ href, label, children }: HeaderIconButtonProps) {
   return (
     <Link
       href={href}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-white hover:text-white sm:h-10 sm:w-10"
+      className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-white/70 transition hover:border-white hover:text-white"
       aria-label={label}
       title={label}
     >
-      {children}
+      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/40">
+        {children}
+      </span>
+      <span className="text-[0.7rem] uppercase tracking-[0.25em] hidden sm:inline">{label}</span>
     </Link>
   );
 }
