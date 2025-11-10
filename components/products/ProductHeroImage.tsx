@@ -23,7 +23,7 @@ export function ProductHeroImage({ src, alt, className, overlay }: ProductHeroIm
           src={src}
           alt={alt}
           fill
-          className="object-contain mix-blend-multiply contrast-[1.15] saturate-[1.1]"
+          className="object-contain p-6 mix-blend-multiply contrast-[1.15] saturate-[1.1] sm:p-8"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
         />

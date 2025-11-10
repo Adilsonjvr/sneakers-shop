@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import type { Route } from 'next';
-import { usePathname, useSearchParams } from 'next/navigation';
 
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
@@ -11,79 +10,81 @@ const HOME_ROUTE = '/' as Route;
 const BAG_ROUTE = '/bag' as Route;
 const ACCOUNT_ROUTE = '/account' as Route;
 
-const navLinks: Array<{ labelKey: 'showroom' | 'drops' | 'collector'; mode?: 'drop' | 'collector' }> = [
-  { labelKey: 'showroom' },
-  { labelKey: 'drops', mode: 'drop' },
-  { labelKey: 'collector', mode: 'collector' },
-];
-
 const copy = {
   pt: {
-    nav: {
-      showroom: 'Showroom',
-      drops: 'Drops',
-      collector: 'Colecionador',
-    },
     bag: 'Sacola',
     account: 'Conta',
   },
   en: {
-    nav: {
-      showroom: 'Showroom',
-      drops: 'Releases',
-      collector: 'Collector',
-    },
     bag: 'Bag',
     account: 'Account',
   },
 };
 
 export function SiteHeader() {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const activeMode = searchParams.get('mode');
   const { lang } = useLanguage();
   const t = copy[lang];
 
   return (
     <header className="sticky top-0 z-20 border-b border-white/10 bg-black/70 backdrop-blur-2xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <div className="flex flex-1 items-center gap-4">
-          <Link
-            href={HOME_ROUTE}
-            className="font-display text-xl font-semibold tracking-[0.3em] uppercase text-white"
-          >
-            AIR // LAB
-          </Link>
-        </div>
-        <nav className="flex flex-1 justify-center gap-6 text-sm uppercase tracking-[0.2em] text-white/60">
-          {navLinks.map((link) => {
-            const isActive =
-              pathname === '/' && (link.mode ? activeMode === link.mode : !activeMode);
-            const href = link.mode
-              ? { pathname: HOME_ROUTE, query: { mode: link.mode } }
-              : HOME_ROUTE;
-            return (
-              <Link
-                key={link.labelKey}
-                href={href}
-                className={`transition hover:text-white ${isActive ? 'text-white' : ''}`}
-              >
-                {t.nav[link.labelKey]}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="flex flex-1 items-center justify-end gap-4 text-xs font-medium uppercase tracking-[0.3em] text-white/60">
-          <LanguageSwitcher />
-          <Link href={BAG_ROUTE} className="transition hover:text-white">
-            {t.bag}
-          </Link>
-          <Link href={ACCOUNT_ROUTE} className="transition hover:text-white">
-            {t.account}
-          </Link>
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-4 sm:px-6">
+        <Link
+          href={HOME_ROUTE}
+          className="font-display text-lg font-semibold tracking-[0.25em] uppercase text-white sm:text-xl"
+        >
+          AIR // LAB
+        </Link>
+        <LanguageSwitcher />
+        <div className="ml-auto flex items-center gap-2">
+          <HeaderIconButton href={BAG_ROUTE} label={t.bag}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4"
+            >
+              <path d="M6 8h12l-1 11H7z" />
+              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            </svg>
+          </HeaderIconButton>
+          <HeaderIconButton href={ACCOUNT_ROUTE} label={t.account}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-4 w-4"
+            >
+              <circle cx="12" cy="8" r="3" />
+              <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" />
+            </svg>
+          </HeaderIconButton>
         </div>
       </div>
     </header>
+  );
+}
+
+type HeaderIconButtonProps = {
+  href: Route;
+  label: string;
+  children: React.ReactNode;
+};
+
+function HeaderIconButton({ href, label, children }: HeaderIconButtonProps) {
+  return (
+    <Link
+      href={href}
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition hover:border-white hover:text-white sm:h-10 sm:w-10"
+      aria-label={label}
+      title={label}
+    >
+      {children}
+    </Link>
   );
 }

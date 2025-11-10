@@ -11,13 +11,14 @@ export function LanguageSwitcher() {
   const { lang, setLang } = useLanguage();
 
   return (
-    <div className="flex rounded-full border border-white/15 bg-white/5 text-xs font-semibold uppercase">
+    <div className="flex rounded-full border border-white/15 bg-white/5 text-[0.65rem] font-semibold uppercase">
       {LANG_OPTIONS.map((option) => (
         <button
           key={option.value}
           type="button"
           onClick={() => setLang(option.value)}
-          className={`px-3 py-1 transition ${
+          aria-pressed={lang === option.value}
+          className={`px-2 py-1 transition ${
             lang === option.value ? 'text-black' : 'text-white/60'
           }`}
           style={{

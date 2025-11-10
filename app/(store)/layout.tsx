@@ -12,7 +12,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
           <Suspense fallback={null}>
             <SiteHeader />
           </Suspense>
-          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-6 py-10">
+          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:gap-10 sm:px-6 sm:py-10">
             {children}
           </main>
         </div>

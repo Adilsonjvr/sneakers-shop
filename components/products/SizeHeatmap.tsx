@@ -45,7 +45,7 @@ export function SizeHeatmap({ sizeHeatmap }: SizeHeatmapProps) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+      <div className="flex items-center justify-between text-[0.7rem] uppercase tracking-[0.3em] text-white/50">
         <span>{t.title}</span>
         {canExpand && (
           <button
@@ -57,11 +57,11 @@ export function SizeHeatmap({ sizeHeatmap }: SizeHeatmapProps) {
           </button>
         )}
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-5">
         {visibleEntries.map(([size, meta]) => (
           <span
             key={size}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold ${availabilityStyles[meta.availability]}`}
+            className={`flex h-10 w-full items-center justify-center rounded-full border text-xs font-semibold uppercase tracking-[0.2em] ${availabilityStyles[meta.availability]}`}
             title={`EU ${size}`}
           >
             {size}

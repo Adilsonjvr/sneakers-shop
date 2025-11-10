@@ -161,17 +161,17 @@ export function ProductCard({ product }: { product: ProductResponse }) {
 
       <SizeHeatmap sizeHeatmap={product.sizeHeatmap} />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition hover:border-white/50 hover:text-white"
+          className="rounded-full border border-white/20 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.2em] text-white/70 transition hover:border-white/50 hover:text-white"
           onClick={() => setShowSizes((prev) => !prev)}
         >
           {t.quickAdd}
         </button>
         <Link
           href={`/products/${product.id}`}
-          className="text-sm uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
+          className="text-xs uppercase tracking-[0.2em] text-white/60 transition hover:text-white"
         >
           {t.viewProduct} →
         </Link>
