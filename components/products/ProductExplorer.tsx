@@ -16,12 +16,12 @@ type ProductExplorerProps = {
 
 const modeOptions: { label: string; value: ProductMode }[] = [
   { label: 'Showroom', value: 'showroom' },
-  { label: 'Drops', value: 'drop' },
-  { label: 'Colecionador', value: 'collector' },
+  { label: 'Drops · Releases', value: 'drop' },
+  { label: 'Colecionador · Collector', value: 'collector' },
 ];
 
 const lineOptions: { label: string; value: ModelLine | 'all' }[] = [
-  { label: 'Todas', value: 'all' },
+  { label: 'Todas · All', value: 'all' },
   { label: 'AJ1', value: ModelLine.AJ1 },
   { label: 'AJ3', value: ModelLine.AJ3 },
   { label: 'AJ4', value: ModelLine.AJ4 },
@@ -68,7 +68,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
           cache: 'no-store',
         });
         if (!response.ok) {
-          throw new Error('Erro ao carregar catálogo');
+          throw new Error('Erro ao carregar catálogo / Failed to load catalog');
         }
         const payload = await response.json();
         if (!cancelled) {
@@ -90,9 +90,9 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
   }, [mode, modelLine, debouncedSearch]);
 
   const subtitle = useMemo(() => {
-    if (mode === 'drop') return 'Fila, reservas e calor em tempo real';
-    if (mode === 'collector') return 'Error-free pairs para portfólios raros';
-    return 'Colorways históricos curados pelo nosso showroom';
+    if (mode === 'drop') return 'Fila e reservas em tempo real · Live queue & reservations';
+    if (mode === 'collector') return 'Pairs raros para portfólios · Rare portfolio-ready pairs';
+    return 'Colorways históricos curados pelo showroom · Curated heritage colorways';
   }, [mode]);
 
   return (
@@ -123,7 +123,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
         <div className="flex flex-wrap gap-3">
           <input
             className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-2 outline-none focus:border-white/40"
-            placeholder="Pesquisar por modelo ou colorway"
+            placeholder="Pesquisar modelo/colorway · Search model or colorway"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
@@ -146,7 +146,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
         </div>
       </div>
 
-      {loading && <p className="text-white/60">A sincronizar stock e calor...</p>}
+      {loading && <p className="text-white/60">A sincronizar stock · Syncing stock...</p>}
 
       <motion.div
         layout
@@ -158,7 +158,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
       </motion.div>
 
       {!loading && products.length === 0 && (
-        <p className="text-center text-white/40">Nenhum par corresponde aos filtros.</p>
+        <p className="text-center text-white/40">Nenhum par corresponde aos filtros · No matches for these filters.</p>
       )}
     </div>
   );

@@ -41,9 +41,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         href="/bag"
         className="fixed bottom-6 right-6 glass-panel px-5 py-3 text-sm shadow-2xl transition hover:scale-[1.02]"
       >
-        <p className="font-display text-xs uppercase tracking-[0.3em] text-white/60">Sacola</p>
+        <p className="font-display text-xs uppercase tracking-[0.3em] text-white/60">Sacola · Bag</p>
         <p className="text-lg font-semibold">
-          {items.length} {items.length === 1 ? 'item' : 'itens'}
+          {items.length} {items.length === 1 ? 'item · item' : 'itens · items'}
         </p>
       </Link>
     </CartContext.Provider>
@@ -53,7 +53,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 export function useCart() {
   const ctx = useContext(CartContext);
   if (!ctx) {
-    throw new Error('useCart deve estar dentro do CartProvider');
+    throw new Error('useCart deve estar dentro do CartProvider / useCart must be inside CartProvider');
   }
   return ctx;
 }

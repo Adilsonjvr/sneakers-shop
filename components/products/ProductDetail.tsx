@@ -50,7 +50,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
           overlay={
             product.isDrop && (
               <div className="absolute left-6 top-6 rounded-full bg-brand px-4 py-1 text-xs uppercase tracking-[0.3em]">
-                Drop exclusivo
+                Drop exclusivo · Exclusive drop
               </div>
             )
           }
@@ -66,7 +66,13 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
                   activeImage === image ? 'border-brand' : 'border-white/10'
                 } bg-white/5 transition`}
               >
-                <Image src={image} alt={`${product.name} detalhe`} fill className="object-contain" sizes="25vw" />
+                <Image
+                  src={image}
+                  alt={`${product.name} detalhe / detail`}
+                  fill
+                  className="object-contain"
+                  sizes="25vw"
+                />
               </button>
             ))}
           </div>
@@ -75,15 +81,19 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
 
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.4em] text-white/50">{product.modelLine}</p>
+          <p className="text-xs uppercase tracking-[0.4em] text-white/50">
+            {product.modelLine} · Heritage line
+          </p>
           <h1 className="font-display text-4xl font-semibold text-white">{product.name}</h1>
-          <p className="text-sm uppercase tracking-[0.3em] text-white/60">{product.colorway}</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-white/60">
+            {product.colorway} · Colorway
+          </p>
           <p className="text-2xl font-semibold text-white">
-            {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : 'Consultar'}
+            {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : 'Consultar · Contact us'}
           </p>
         </div>
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-white/50">Story</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-white/50">Story · Narrative</p>
           <div
             className="prose prose-invert max-w-none text-white/80"
             dangerouslySetInnerHTML={{ __html: product.storyHtml ?? '<p>Story forthcoming.</p>' }}
@@ -91,7 +101,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50">Seleciona tamanho</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-white/50">Seleciona tamanho · Select size</p>
           <div className="mt-3 grid grid-cols-4 gap-2">
             {product.variants.map((variant) => (
               <button
@@ -119,7 +129,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
             disabled={!selectedVariant || selectedVariant.availabilityState === AvailabilityState.OUT_OF_STOCK}
             className="mt-4 w-full rounded-2xl bg-white px-4 py-3 font-semibold uppercase tracking-[0.3em] text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Adicionar — € {selectedVariant?.price.toFixed(2)}
+            Adicionar à sacola · Add to bag — € {selectedVariant?.price.toFixed(2)}
           </button>
         </div>
 

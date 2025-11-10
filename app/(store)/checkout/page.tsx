@@ -9,20 +9,20 @@ import { formatCurrency } from '@/lib/utils/format';
 const paymentMethods = [
   {
     id: 'card',
-    label: 'Cartão de crédito',
-    description: 'Visa, Mastercard, Amex · Suporte a 3DS',
+    label: 'Cartão de crédito · Credit card',
+    description: 'Visa, Mastercard, Amex · Suporte 3DS / SCA ready',
     badge: '💳',
   },
   {
     id: 'mbway',
     label: 'MB Way',
-    description: 'Pagamento instantâneo mobile em Portugal',
+    description: 'Pagamento instantâneo mobile em Portugal · Instant mobile payments',
     badge: '📱',
   },
   {
     id: 'klarna',
     label: 'Klarna',
-    description: 'Paga em 3x sem juros · ideal para colecionadores',
+    description: 'Paga em 3x sem juros · Pay in 3 with zero interest',
     badge: '🕒',
   },
 ];
@@ -40,17 +40,17 @@ export default function CheckoutPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert('Fluxo meramente conceitual — nenhum pagamento foi processado.');
+    alert('Fluxo meramente conceitual — nenhum pagamento foi processado. / Concept-only flow — no payment processed.');
   };
 
   return (
     <div className="space-y-8">
       <header className="glass-panel space-y-3 border border-white/10 bg-black/50 p-8">
-        <p className="text-sm uppercase tracking-[0.4em] text-white/40">Checkout conceptual</p>
-        <h1 className="font-display text-4xl font-semibold text-white">Simulação Stripe-ready</h1>
+        <p className="text-sm uppercase tracking-[0.4em] text-white/40">Checkout conceptual · Concept checkout</p>
+        <h1 className="font-display text-4xl font-semibold text-white">Simulação Stripe-ready · Stripe-ready mock</h1>
         <p className="text-white/60">
-          Estrutura preparada para SCA/3DS, mas desconectada da API nesta fase de portfolio. Use para demonstrar
-          fluxos de compra premium.
+          Estrutura preparada para SCA/3DS, mas desconectada da API nesta fase de portfolio. Use para demonstrar fluxos
+          de compra premium. / Built for SCA/3DS but disconnected from Stripe for this portfolio phase.
         </p>
       </header>
 
@@ -60,10 +60,10 @@ export default function CheckoutPage() {
       >
         <div className="space-y-6">
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Dados pessoais</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Dados pessoais · Personal info</p>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <label className="space-y-1 text-sm text-white/70">
-                Nome completo
+                Nome completo · Full name
                 <input
                   type="text"
                   className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -81,7 +81,7 @@ export default function CheckoutPage() {
                 />
               </label>
               <label className="space-y-1 text-sm text-white/70">
-                Telefone
+                Telefone · Phone
                 <input
                   type="tel"
                   className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -89,7 +89,7 @@ export default function CheckoutPage() {
                 />
               </label>
               <label className="space-y-1 text-sm text-white/70">
-                NIF
+                NIF · Tax ID
                 <input
                   type="text"
                   className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -100,10 +100,10 @@ export default function CheckoutPage() {
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Endereço & envio</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Endereço & envio · Shipping details</p>
             <div className="mt-4 grid gap-4">
               <label className="space-y-1 text-sm text-white/70">
-                Morada
+                Morada · Address
                 <input
                   type="text"
                   className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
               </label>
               <div className="grid gap-4 md:grid-cols-3">
                 <label className="space-y-1 text-sm text-white/70">
-                  Código Postal
+                  Código Postal · ZIP
                   <input
                     type="text"
                     className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
                   />
                 </label>
                 <label className="space-y-1 text-sm text-white/70">
-                  Cidade
+                  Cidade · City
                   <input
                     type="text"
                     className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -131,7 +131,7 @@ export default function CheckoutPage() {
                   />
                 </label>
                 <label className="space-y-1 text-sm text-white/70">
-                  País
+                  País · Country
                   <select
                     className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
                     defaultValue="Portugal"
@@ -144,7 +144,7 @@ export default function CheckoutPage() {
                 </label>
               </div>
               <label className="space-y-1 text-sm text-white/70">
-                Notas de entrega
+                Notas de entrega · Delivery notes
                 <textarea
                   className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
                   rows={3}
@@ -155,7 +155,7 @@ export default function CheckoutPage() {
           </section>
 
           <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Pagamento</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Pagamento · Payment</p>
             <div className="mt-4 grid gap-3">
               {paymentMethods.map((option) => (
                 <label
@@ -182,7 +182,7 @@ export default function CheckoutPage() {
             </div>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <label className="space-y-1 text-sm text-white/70">
-                Número do cartão
+                Número do cartão · Card number
                 <input
                   type="text"
                   inputMode="numeric"
@@ -193,7 +193,7 @@ export default function CheckoutPage() {
               </label>
               <div className="grid gap-4 grid-cols-2">
                 <label className="space-y-1 text-sm text-white/70">
-                  Expira
+                  Expira · Expiration
                   <input
                     type="text"
                     className="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-white"
@@ -215,18 +215,19 @@ export default function CheckoutPage() {
 
         <aside className="space-y-4 rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/0 p-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Resumo da ordem</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Resumo da ordem · Order summary</p>
             <div className="mt-4 space-y-3">
               {items.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-white/20 p-4 text-sm text-white/60">
-                  Nenhum item na sacola. Volte para o showroom para adicionar pares.
+                  Nenhum item na sacola. Volte para o showroom para adicionar pares. / No items in the bag—return to the
+                  showroom to add pairs.
                 </div>
               ) : (
                 items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between text-sm text-white/80">
                     <div>
                       <p className="font-semibold">{item.name}</p>
-                      <p className="text-white/50">{item.sizeLabel}</p>
+                      <p className="text-white/50">{item.sizeLabel} · Size</p>
                     </div>
                     <p>{formatCurrency(item.price)}</p>
                   </div>
@@ -240,12 +241,12 @@ export default function CheckoutPage() {
               <span>{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span>IVA</span>
+              <span>IVA · VAT</span>
               <span>{formatCurrency(vat)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Envio</span>
-              <span>{shipping ? formatCurrency(shipping) : 'Incluído'}</span>
+              <span>Envio · Shipping</span>
+              <span>{shipping ? formatCurrency(shipping) : 'Incluído / Included'}</span>
             </div>
           </div>
           <div className="flex items-center justify-between border-t border-white/10 pt-4 text-white">
@@ -257,17 +258,18 @@ export default function CheckoutPage() {
             className="w-full rounded-2xl bg-white px-4 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={!items.length}
           >
-            Simular pagamento
+            Simular pagamento · Simulate payment
           </button>
           <div className="text-xs text-white/50">
             Ao clicar em “Simular pagamento” nenhum dado é enviado a gateways externos. Use para apresentações,
-            estudos de caso e storytelling de produto.
+            estudos de caso e storytelling de produto. / No data is sent to gateways – perfect for demos and case
+            studies.
           </div>
           <Link
             href="/bag"
             className="inline-flex w-full justify-center rounded-2xl border border-white/20 px-4 py-3 text-center text-xs uppercase tracking-[0.3em] text-white/70 transition hover:border-white hover:text-white"
           >
-            Voltar à sacola
+            Voltar à sacola · Back to bag
           </Link>
         </aside>
       </form>

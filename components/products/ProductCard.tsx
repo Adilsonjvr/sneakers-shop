@@ -12,9 +12,9 @@ import { SizeHeatmap } from './SizeHeatmap';
 import { ProductHeroImage } from './ProductHeroImage';
 
 const availabilityCopy: Record<AvailabilityState, string> = {
-  IN_STOCK: 'Disponível',
-  LOW_STOCK: 'Últimos pares',
-  OUT_OF_STOCK: 'Esgotado',
+  IN_STOCK: 'Disponível · In stock',
+  LOW_STOCK: 'Últimos pares · Low stock',
+  OUT_OF_STOCK: 'Esgotado · Sold out',
 };
 
 export function ProductCard({ product }: { product: ProductResponse }) {
@@ -91,7 +91,7 @@ export function ProductCard({ product }: { product: ProductResponse }) {
             )}
             {product.activeDrop && (
               <span className="absolute right-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs text-white/70">
-                A iniciar {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
+                A iniciar / Starts {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
               </span>
             )}
           </>
@@ -100,20 +100,24 @@ export function ProductCard({ product }: { product: ProductResponse }) {
 
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-white/50">{product.modelLine}</p>
+          <p className="text-xs uppercase tracking-[0.4em] text-white/50">
+            {product.modelLine} · Heritage line
+          </p>
           <Link
             href={`/products/${product.id}`}
             className="text-lg font-semibold transition hover:text-brand"
           >
             {product.name}
           </Link>
-          <p className="text-sm text-white/70">{product.colorway}</p>
+          <p className="text-sm text-white/70">
+            {product.colorway} · Colorway
+          </p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-white/60">{availabilityCopy[sortedVariants[0]?.availabilityState ?? AvailabilityState.IN_STOCK]}</p>
-          <p className="text-xl font-semibold">
-            € {product.priceRange.min.toFixed(0)}
+          <p className="text-sm text-white/60">
+            {availabilityCopy[sortedVariants[0]?.availabilityState ?? AvailabilityState.IN_STOCK]}
           </p>
+          <p className="text-xl font-semibold">€ {product.priceRange.min.toFixed(0)}</p>
         </div>
       </div>
 
@@ -125,19 +129,21 @@ export function ProductCard({ product }: { product: ProductResponse }) {
           className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition hover:border-white/50 hover:text-white"
           onClick={() => setShowSizes((prev) => !prev)}
         >
-          Quick add
+          Quick add · Adicionar
         </button>
         <Link
           href={`/products/${product.id}`}
           className="text-sm uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
         >
-          Ver PDP →
+          Ver produto · View product →
         </Link>
       </div>
 
       {showSizes && (
         <div className="rounded-2xl border border-white/10 bg-black/60 p-3">
-          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">Seleciona tamanho</p>
+          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">
+            Seleciona tamanho · Select size
+          </p>
           <div className="grid grid-cols-4 gap-2 text-sm">
             {sortedVariants.map((variant) => (
               <button

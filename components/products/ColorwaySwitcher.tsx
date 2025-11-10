@@ -14,7 +14,9 @@ export function ColorwaySwitcher({ options, currentId }: ColorwaySwitcherProps) 
 
   return (
     <div className="space-y-3">
-      <p className="text-xs uppercase tracking-[0.3em] text-white/50">Outras colorways</p>
+      <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+        Outras colorways · Other colorways
+      </p>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => (
           <Link

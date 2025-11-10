@@ -2,12 +2,6 @@
 
 import { AvailabilityState } from '@prisma/client';
 
-const palette: Record<AvailabilityState, string> = {
-  IN_STOCK: 'bg-brand/40 text-white',
-  LOW_STOCK: 'bg-orange-400/40 text-white',
-  OUT_OF_STOCK: 'bg-red-500/30 text-white/60',
-};
-
 type SizeHeatmapProps = {
   sizeHeatmap: Record<
     string,
@@ -18,24 +12,52 @@ type SizeHeatmapProps = {
   >;
 };
 
+const statusCopy: Record<AvailabilityState, { pt: string; en: string; badge: string }> = {
+  IN_STOCK: {
+    pt: 'Disponível',
+    en: 'In stock',
+    badge: 'bg-emerald-400',
+  },
+  LOW_STOCK: {
+    pt: 'Últimos pares',
+    en: 'Low stock',
+    badge: 'bg-amber-400',
+  },
+  OUT_OF_STOCK: {
+    pt: 'Esgotado',
+    en: 'Sold out',
+    badge: 'bg-red-500',
+  },
+};
+
 export function SizeHeatmap({ sizeHeatmap }: SizeHeatmapProps) {
   const entries = Object.entries(sizeHeatmap).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]));
-  const maxQty = entries.reduce((max, [, meta]) => Math.max(max, meta.qtyAvailable), 0) || 1;
-
   return (
-    <div>
-      <p className="text-xs uppercase tracking-[0.3em] text-white/50">Heatmap tamanhos</p>
-      <div className="mt-2 grid grid-cols-4 gap-2 text-center text-xs font-semibold">
-        {entries.map(([size, meta]) => (
-          <div
-            key={size}
-            className={`rounded-xl px-3 py-2 ${palette[meta.availability]}`}
-          >
-            <p>EU {size}</p>
-            <p className="text-[0.65rem] opacity-80">{meta.qtyAvailable} pares</p>
-          </div>
-        ))}
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+        <span>Tamanhos / Sizes</span>
+        <span>Status</span>
       </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {entries.map(([size, meta]) => {
+          const status = statusCopy[meta.availability];
+          return (
+            <div
+              key={size}
+              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/40 px-3 py-2 text-sm text-white/80"
+            >
+              <span className="font-semibold">EU {size}</span>
+              <span className="flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-white/60">
+                <span className={`h-2 w-2 rounded-full ${status.badge}`} />
+                {status.pt} · {status.en}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-3 text-[0.7rem] uppercase tracking-[0.3em] text-white/40">
+        Disponibilidade por tamanho · Size availability
+      </p>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const ACCOUNT_ROUTE = '/account' as Route;
 const navLinks: Array<{ label: string; mode?: 'drop' | 'collector' }> = [
   { label: 'Showroom' },
   { label: 'Drops', mode: 'drop' },
-  { label: 'Colecionador', mode: 'collector' },
+  { label: 'Colecionador · Collector', mode: 'collector' },
 ];
 
 export function SiteHeader() {
@@ -49,10 +49,10 @@ export function SiteHeader() {
         <div className="flex items-center gap-4 text-xs font-medium uppercase tracking-[0.3em] text-white/60">
           <span>PT · EUR</span>
           <Link href={BAG_ROUTE} className="transition hover:text-white">
-            Sacola
+            Sacola · Bag
           </Link>
           <Link href={ACCOUNT_ROUTE} className="transition hover:text-white">
-            Conta
+            Conta · Account
           </Link>
         </div>
       </div>
