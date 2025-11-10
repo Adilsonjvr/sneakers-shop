@@ -106,6 +106,7 @@ const copy = {
 export function ProductDetail({ product, relatedColorways }: ProductDetailProps) {
   const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState(() => product.variants[0]);
+  const [sizeUnit, setSizeUnit] = useState<'EU' | 'US'>('EU');
   const gallery = useMemo(() => {
     if (product.galleryImages.length) return product.galleryImages;
     return product.heroImageUrl ? [product.heroImageUrl] : [];
@@ -113,6 +114,14 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
   const [activeImage, setActiveImage] = useState<string | undefined>(product.heroImageUrl ?? gallery[0]);
   const { lang } = useLanguage();
   const t = copy[lang];
+
+  const resolveSizeLabel = (variant?: ProductResponse['variants'][number]) => {
+    if (!variant) return 'N/A';
+    const raw = sizeUnit === 'EU' ? variant.sizeEu : variant.sizeUs;
+    if (!raw) return 'N/A';
+    const formatted = sizeUnit === 'EU' ? raw.toFixed(1) : raw.toFixed(1);
+    return `${sizeUnit} ${formatted}`;
+  };
 
   const handleAddToBag = () => {
     if (!selectedVariant) return;
@@ -122,7 +131,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
       variantId: selectedVariant.id,
       name: product.name,
       colorway: product.colorway,
-      sizeLabel: selectedVariant.sizeEu ? `EU ${selectedVariant.sizeEu.toFixed(1)}` : 'N/A',
+      sizeLabel: resolveSizeLabel(selectedVariant),
       price: selectedVariant.price,
       imageUrl: product.heroImageUrl ?? gallery[0] ?? undefined,
     });
@@ -176,7 +185,21 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
         <StoryBlock product={product} lang={lang} copy={t} />
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50">{t.selectSize}</p>
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
+            <span>{t.selectSize}</span>
+            <div className="flex rounded-full border border-white/15 bg-black/30 text-[0.6rem] font-semibold uppercase">
+              {(['EU', 'US'] as const).map((unit) => (
+                <button
+                  key={unit}
+                  type="button"
+                  onClick={() => setSizeUnit(unit)}
+                  className={`px-2 py-1 ${sizeUnit === unit ? 'bg-white text-black' : 'text-white/60'}`}
+                >
+                  {unit}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="mt-3 grid grid-cols-4 gap-2">
             {product.variants.map((variant) => (
               <button
@@ -194,7 +217,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
                     : ''
                 }`}
               >
-                EU {variant.sizeEu?.toFixed(1)}
+                {resolveSizeLabel(variant)}
               </button>
             ))}
           </div>
