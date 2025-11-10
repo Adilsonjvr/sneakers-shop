@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import type { Route } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ProductDetail } from '@/components/products/ProductDetail';
+import { BackToShowroomLink } from '@/components/store/BackToShowroomLink';
 import { hasDatabaseUrl } from '@/lib/env';
 import { fetchProductById, fetchProducts } from '@/lib/products';
 import type { ProductResponse } from '@/lib/products';
@@ -18,14 +18,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
   let product: ProductResponse | null = null;
 
   if (!hasDatabaseUrl) {
-    productError =
-      'DATABASE_URL não configurado. Não é possível carregar o produto. / DATABASE_URL missing – cannot load product.';
+    productError = 'DATABASE_URL missing – cannot load product.';
   } else {
     try {
       product = await fetchProductById(params.id);
     } catch (error) {
       console.error('Falha ao carregar produto', error);
-      productError = 'Não foi possível ligar à base de dados para carregar este produto. / Unable to reach the database.';
+      productError = 'Unable to reach the database.';
     }
   }
 
@@ -59,12 +58,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Link
-        href={showroomRoute}
-        className="text-xs uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
-      >
-        ← voltar ao showroom · Back to showroom
-      </Link>
+      <BackToShowroomLink href={showroomRoute} />
       <ProductDetail product={product} relatedColorways={filteredRelated} />
     </div>
   );

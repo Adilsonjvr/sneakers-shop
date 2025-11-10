@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { createContext, useContext, useMemo, useState } from 'react';
 
+import { useLanguage } from '@/components/i18n/LanguageProvider';
+
 type CartItem = {
   id: string;
   productId: string;
@@ -24,6 +26,13 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const { lang } = useLanguage();
+
+  const labels = {
+    pt: { bag: 'Sacola', singular: 'item', plural: 'itens' },
+    en: { bag: 'Bag', singular: 'item', plural: 'items' },
+  } as const;
+  const t = labels[lang];
 
   const value = useMemo<CartContextValue>(
     () => ({
@@ -41,9 +50,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         href="/bag"
         className="fixed bottom-6 right-6 glass-panel px-5 py-3 text-sm shadow-2xl transition hover:scale-[1.02]"
       >
-        <p className="font-display text-xs uppercase tracking-[0.3em] text-white/60">Sacola · Bag</p>
+        <p className="font-display text-xs uppercase tracking-[0.3em] text-white/60">{t.bag}</p>
         <p className="text-lg font-semibold">
-          {items.length} {items.length === 1 ? 'item · item' : 'itens · items'}
+          {items.length} {items.length === 1 ? t.singular : t.plural}
         </p>
       </Link>
     </CartContext.Provider>

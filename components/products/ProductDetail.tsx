@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
+import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
 
@@ -18,6 +19,27 @@ type ProductDetailProps = {
   relatedColorways: ProductResponse[];
 };
 
+const copy = {
+  pt: {
+    line: 'Linha',
+    colorway: 'Colorway',
+    priceFallback: 'Consultar',
+    story: 'Story',
+    selectSize: 'Selecionar tamanho',
+    addToBag: 'Adicionar à sacola',
+    dropBadge: 'Drop exclusivo',
+  },
+  en: {
+    line: 'Line',
+    colorway: 'Colorway',
+    priceFallback: 'Contact us',
+    story: 'Story',
+    selectSize: 'Select size',
+    addToBag: 'Add to bag',
+    dropBadge: 'Exclusive drop',
+  },
+};
+
 export function ProductDetail({ product, relatedColorways }: ProductDetailProps) {
   const { addItem } = useCart();
   const [selectedVariant, setSelectedVariant] = useState(() => product.variants[0]);
@@ -26,6 +48,8 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
     return product.heroImageUrl ? [product.heroImageUrl] : [];
   }, [product.galleryImages, product.heroImageUrl]);
   const [activeImage, setActiveImage] = useState<string | undefined>(product.heroImageUrl ?? gallery[0]);
+  const { lang } = useLanguage();
+  const t = copy[lang];
 
   const handleAddToBag = () => {
     if (!selectedVariant) return;
@@ -50,7 +74,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
           overlay={
             product.isDrop && (
               <div className="absolute left-6 top-6 rounded-full bg-brand px-4 py-1 text-xs uppercase tracking-[0.3em]">
-                Drop exclusivo · Exclusive drop
+                {t.dropBadge}
               </div>
             )
           }
@@ -66,13 +90,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
                   activeImage === image ? 'border-brand' : 'border-white/10'
                 } bg-white/5 transition`}
               >
-                <Image
-                  src={image}
-                  alt={`${product.name} detalhe / detail`}
-                  fill
-                  className="object-contain"
-                  sizes="25vw"
-                />
+                <Image src={image} alt={`${product.name} detail`} fill className="object-contain" sizes="25vw" />
               </button>
             ))}
           </div>
@@ -82,18 +100,18 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
       <div className="flex flex-col gap-6">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.4em] text-white/50">
-            {product.modelLine} · Heritage line
+            {t.line}: {product.modelLine}
           </p>
           <h1 className="font-display text-4xl font-semibold text-white">{product.name}</h1>
           <p className="text-sm uppercase tracking-[0.3em] text-white/60">
-            {product.colorway} · Colorway
+            {t.colorway}: {product.colorway}
           </p>
           <p className="text-2xl font-semibold text-white">
-            {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : 'Consultar · Contact us'}
+            {selectedVariant ? `€ ${selectedVariant.price.toFixed(2)}` : t.priceFallback}
           </p>
         </div>
         <div>
-          <p className="text-sm uppercase tracking-[0.3em] text-white/50">Story · Narrative</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-white/50">{t.story}</p>
           <div
             className="prose prose-invert max-w-none text-white/80"
             dangerouslySetInnerHTML={{ __html: product.storyHtml ?? '<p>Story forthcoming.</p>' }}
@@ -101,7 +119,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50">Seleciona tamanho · Select size</p>
+          <p className="text-xs uppercase tracking-[0.3em] text-white/50">{t.selectSize}</p>
           <div className="mt-3 grid grid-cols-4 gap-2">
             {product.variants.map((variant) => (
               <button
@@ -129,7 +147,7 @@ export function ProductDetail({ product, relatedColorways }: ProductDetailProps)
             disabled={!selectedVariant || selectedVariant.availabilityState === AvailabilityState.OUT_OF_STOCK}
             className="mt-4 w-full rounded-2xl bg-white px-4 py-3 font-semibold uppercase tracking-[0.3em] text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Adicionar à sacola · Add to bag — € {selectedVariant?.price.toFixed(2)}
+            {t.addToBag} — € {selectedVariant?.price.toFixed(2)}
           </button>
         </div>
 

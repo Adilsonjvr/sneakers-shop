@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import { ProductExplorer } from '@/components/products/ProductExplorer';
+import { StoreHero } from '@/components/store/StoreHero';
 import { hasDatabaseUrl } from '@/lib/env';
 import { fetchProducts, ProductMode } from '@/lib/products';
 
@@ -14,7 +15,7 @@ type StorePageProps = {
 
 export default async function StorePage({ searchParams }: StorePageProps) {
   const mode = (searchParams?.mode as ProductMode | undefined) ?? 'showroom';
-  let errorMessage: string | undefined;
+  let errorCode: 'missingDb' | 'fetchFailed' | undefined;
   type ProductsPayload = Awaited<ReturnType<typeof fetchProducts>>;
   let initialData: ProductsPayload = {
     data: [],
@@ -22,8 +23,7 @@ export default async function StorePage({ searchParams }: StorePageProps) {
   };
 
   if (!hasDatabaseUrl) {
-    errorMessage =
-      'DATABASE_URL não configurado. Define uma base de dados remota antes de continuar. / DATABASE_URL missing. Configure a remote database before continuing.';
+    errorCode = 'missingDb';
   } else {
     try {
       initialData = await fetchProducts({
@@ -32,33 +32,18 @@ export default async function StorePage({ searchParams }: StorePageProps) {
       });
     } catch (error) {
       console.error('Falha ao carregar catálogo', error);
-      errorMessage =
-        'Não foi possível ligar à base de dados. Define DATABASE_URL acessível no projeto Vercel. / Unable to reach the database. Provide a reachable DATABASE_URL (e.g. Supabase) for this Vercel project.';
+      errorCode = 'fetchFailed';
     }
   }
 
   return (
     <div className="flex flex-col gap-8">
-      <section className="space-y-4">
-        <p className="text-sm uppercase tracking-[0.4em] text-white/50">Coleção · Collection</p>
-        <h1 className="font-display text-4xl font-semibold">
-          Air Jordan Archive —{' '}
-          {mode === 'drop'
-            ? 'Drops ativos · Live releases'
-            : mode === 'collector'
-              ? 'Colecionador · Collector'
-              : 'Showroom'}
-        </h1>
-        <p className="text-white/70">
-          Explora colorways icónicas, reserva durante drops e acompanha o calor de cada tamanho em tempo real. / Explore
-          iconic colorways, reserve during drops, and monitor heat per size in real time.
-        </p>
-      </section>
-      <Suspense fallback={<div className="text-white/60">A carregar catálogo / Loading catalog...</div>}>
+      <StoreHero mode={mode} />
+      <Suspense fallback={<div className="text-white/60">Loading...</div>}>
         <ProductExplorer
           initialData={initialData}
           initialMode={mode}
-          errorMessage={errorMessage}
+          errorCode={errorCode}
         />
       </Suspense>
     </div>

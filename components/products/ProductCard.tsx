@@ -5,16 +5,48 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 
+import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { useCart } from '@/components/cart/CartProvider';
 import { ProductResponse } from '@/lib/products';
 
 import { SizeHeatmap } from './SizeHeatmap';
 import { ProductHeroImage } from './ProductHeroImage';
 
-const availabilityCopy: Record<AvailabilityState, string> = {
-  IN_STOCK: 'Disponível · In stock',
-  LOW_STOCK: 'Últimos pares · Low stock',
-  OUT_OF_STOCK: 'Esgotado · Sold out',
+const availabilityCopy: Record<
+  'pt' | 'en',
+  Record<AvailabilityState, string>
+> = {
+  pt: {
+    IN_STOCK: 'Disponível',
+    LOW_STOCK: 'Poucas unidades',
+    OUT_OF_STOCK: 'Esgotado',
+  },
+  en: {
+    IN_STOCK: 'In stock',
+    LOW_STOCK: 'Low stock',
+    OUT_OF_STOCK: 'Sold out',
+  },
+};
+
+const copy = {
+  pt: {
+    lineLabel: 'Linha',
+    colorwayLabel: 'Colorway',
+    drop: 'Drop',
+    starts: 'Inicia',
+    quickAdd: 'Adicionar rápido',
+    viewProduct: 'Ver detalhes',
+    selectSize: 'Selecionar tamanho',
+  },
+  en: {
+    lineLabel: 'Line',
+    colorwayLabel: 'Colorway',
+    drop: 'Drop',
+    starts: 'Starts',
+    quickAdd: 'Quick add',
+    viewProduct: 'View details',
+    selectSize: 'Select size',
+  },
 };
 
 export function ProductCard({ product }: { product: ProductResponse }) {
@@ -22,6 +54,9 @@ export function ProductCard({ product }: { product: ProductResponse }) {
   const [spotlight, setSpotlight] = useState({ x: 50, active: false });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { addItem } = useCart();
+  const { lang } = useLanguage();
+  const t = copy[lang];
+  const availabilityLabel = availabilityCopy[lang];
 
   const sortedVariants = product.variants
     .filter((variant) => variant.sizeEu !== null)
@@ -74,7 +109,7 @@ export function ProductCard({ product }: { product: ProductResponse }) {
         className="pointer-events-none absolute inset-0 hidden rounded-[inherit] transition-opacity duration-300 md:block"
         style={{
           opacity: spotlight.active ? 1 : 0,
-          background: `radial-gradient(circle at ${spotlight.x}% 0%, rgba(255,255,255,0.2), transparent 60%)`,
+          background: `radial-gradient(circle at ${spotlight.x}% 0%, rgba(255,255,255,0.15), transparent 60%)`,
           transform: 'translateZ(0)',
           mixBlendMode: 'screen',
         }}
@@ -86,12 +121,15 @@ export function ProductCard({ product }: { product: ProductResponse }) {
           <>
             {product.isDrop && (
               <span className="absolute left-4 top-4 rounded-full bg-brand px-3 py-1 text-xs uppercase tracking-[0.3em]">
-                Drop
+                {t.drop}
               </span>
             )}
             {product.activeDrop && (
               <span className="absolute right-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs text-white/70">
-                A iniciar / Starts {new Date(product.activeDrop.startAt).toLocaleDateString('pt-PT')}
+                {t.starts}{' '}
+                {new Date(product.activeDrop.startAt).toLocaleDateString(
+                  lang === 'pt' ? 'pt-PT' : 'en-US',
+                )}
               </span>
             )}
           </>
@@ -101,7 +139,7 @@ export function ProductCard({ product }: { product: ProductResponse }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-white/50">
-            {product.modelLine} · Heritage line
+            {t.lineLabel}: {product.modelLine}
           </p>
           <Link
             href={`/products/${product.id}`}
@@ -110,12 +148,12 @@ export function ProductCard({ product }: { product: ProductResponse }) {
             {product.name}
           </Link>
           <p className="text-sm text-white/70">
-            {product.colorway} · Colorway
+            {t.colorwayLabel}: {product.colorway}
           </p>
         </div>
         <div className="text-right">
           <p className="text-sm text-white/60">
-            {availabilityCopy[sortedVariants[0]?.availabilityState ?? AvailabilityState.IN_STOCK]}
+            {availabilityLabel[sortedVariants[0]?.availabilityState ?? AvailabilityState.IN_STOCK]}
           </p>
           <p className="text-xl font-semibold">€ {product.priceRange.min.toFixed(0)}</p>
         </div>
@@ -129,21 +167,19 @@ export function ProductCard({ product }: { product: ProductResponse }) {
           className="rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white/70 transition hover:border-white/50 hover:text-white"
           onClick={() => setShowSizes((prev) => !prev)}
         >
-          Quick add · Adicionar
+          {t.quickAdd}
         </button>
         <Link
           href={`/products/${product.id}`}
           className="text-sm uppercase tracking-[0.3em] text-white/60 transition hover:text-white"
         >
-          Ver produto · View product →
+          {t.viewProduct} →
         </Link>
       </div>
 
       {showSizes && (
         <div className="rounded-2xl border border-white/10 bg-black/60 p-3">
-          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">
-            Seleciona tamanho · Select size
-          </p>
+          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">{t.selectSize}</p>
           <div className="grid grid-cols-4 gap-2 text-sm">
             {sortedVariants.map((variant) => (
               <button

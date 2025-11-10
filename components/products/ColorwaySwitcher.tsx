@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 
+import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { ProductResponse } from '@/lib/products';
 
 type ColorwaySwitcherProps = {
@@ -11,12 +12,12 @@ type ColorwaySwitcherProps = {
 
 export function ColorwaySwitcher({ options, currentId }: ColorwaySwitcherProps) {
   if (!options.length) return null;
+  const { lang } = useLanguage();
+  const label = lang === 'pt' ? 'Outras colorways' : 'Other colorways';
 
   return (
     <div className="space-y-3">
-      <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-        Outras colorways · Other colorways
-      </p>
+      <p className="text-xs uppercase tracking-[0.3em] text-white/50">{label}</p>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => (
           <Link

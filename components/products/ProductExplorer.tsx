@@ -4,6 +4,7 @@ import { ModelLine } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { ProductMode, ProductResponse } from '@/lib/products';
 
 import { ProductCard } from '@/components/products/ProductCard';
@@ -11,21 +12,21 @@ import { ProductCard } from '@/components/products/ProductCard';
 type ProductExplorerProps = {
   initialData: { data: ProductResponse[] };
   initialMode: ProductMode;
-  errorMessage?: string;
+  errorCode?: 'missingDb' | 'fetchFailed';
 };
 
-const modeOptions: { label: string; value: ProductMode }[] = [
-  { label: 'Showroom', value: 'showroom' },
-  { label: 'Drops · Releases', value: 'drop' },
-  { label: 'Colecionador · Collector', value: 'collector' },
+const modeOptions: Array<{ value: ProductMode; labelKey: 'showroom' | 'drops' | 'collector' }> = [
+  { value: 'showroom', labelKey: 'showroom' },
+  { value: 'drop', labelKey: 'drops' },
+  { value: 'collector', labelKey: 'collector' },
 ];
 
-const lineOptions: { label: string; value: ModelLine | 'all' }[] = [
-  { label: 'Todas · All', value: 'all' },
-  { label: 'AJ1', value: ModelLine.AJ1 },
-  { label: 'AJ3', value: ModelLine.AJ3 },
-  { label: 'AJ4', value: ModelLine.AJ4 },
-  { label: 'AJ11', value: ModelLine.AJ11 },
+const lineOptions: Array<{ value: ModelLine | 'all'; labelKey: 'all' | 'aj1' | 'aj3' | 'aj4' | 'aj11' }> = [
+  { labelKey: 'all', value: 'all' },
+  { labelKey: 'aj1', value: ModelLine.AJ1 },
+  { labelKey: 'aj3', value: ModelLine.AJ3 },
+  { labelKey: 'aj4', value: ModelLine.AJ4 },
+  { labelKey: 'aj11', value: ModelLine.AJ11 },
 ];
 
 const useDebouncedValue = <T,>(value: T, delay = 300) => {
@@ -37,12 +38,73 @@ const useDebouncedValue = <T,>(value: T, delay = 300) => {
   return debounced;
 };
 
-export function ProductExplorer({ initialData, initialMode, errorMessage }: ProductExplorerProps) {
+export function ProductExplorer({ initialData, initialMode, errorCode }: ProductExplorerProps) {
   const [mode, setMode] = useState<ProductMode>(initialMode);
   const [modelLine, setModelLine] = useState<ModelLine | 'all'>('all');
   const [search, setSearch] = useState('');
   const [products, setProducts] = useState<ProductResponse[]>(initialData.data);
   const [loading, setLoading] = useState(false);
+  const { lang } = useLanguage();
+
+  const copy = useMemo(
+    () => ({
+      pt: {
+        subtitle: {
+          showroom: 'Colorways históricos curados pelo showroom',
+          drop: 'Fila e reservas em tempo real',
+          collector: 'Pairs raros para portfólios',
+        },
+        search: 'Pesquisar modelo ou colorway',
+        syncing: 'A sincronizar stock...',
+        empty: 'Nenhum par corresponde aos filtros.',
+        errors: {
+          missingDb: 'Adiciona o DATABASE_URL para carregar o catálogo.',
+          fetchFailed: 'Não foi possível ligar à base de dados.',
+        },
+        modes: {
+          showroom: 'Showroom',
+          drops: 'Drops',
+          collector: 'Colecionador',
+        },
+        lines: {
+          all: 'Todas',
+          aj1: 'AJ1',
+          aj3: 'AJ3',
+          aj4: 'AJ4',
+          aj11: 'AJ11',
+        },
+      },
+      en: {
+        subtitle: {
+          showroom: 'Curated heritage colorways',
+          drop: 'Live queue & reservations',
+          collector: 'Rare portfolio-ready pairs',
+        },
+        search: 'Search model or colorway',
+        syncing: 'Syncing stock...',
+        empty: 'No products found for these filters.',
+        errors: {
+          missingDb: 'Add a DATABASE_URL to load the catalog.',
+          fetchFailed: 'Unable to reach the database.',
+        },
+        modes: {
+          showroom: 'Showroom',
+          drops: 'Releases',
+          collector: 'Collector',
+        },
+        lines: {
+          all: 'All',
+          aj1: 'AJ1',
+          aj3: 'AJ3',
+          aj4: 'AJ4',
+          aj11: 'AJ11',
+        },
+      },
+    }),
+    [],
+  );
+
+  const t = copy[lang];
 
   const debouncedSearch = useDebouncedValue(search, 500);
 
@@ -68,7 +130,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
           cache: 'no-store',
         });
         if (!response.ok) {
-          throw new Error('Erro ao carregar catálogo / Failed to load catalog');
+          throw new Error('Failed to load catalog');
         }
         const payload = await response.json();
         if (!cancelled) {
@@ -90,17 +152,17 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
   }, [mode, modelLine, debouncedSearch]);
 
   const subtitle = useMemo(() => {
-    if (mode === 'drop') return 'Fila e reservas em tempo real · Live queue & reservations';
-    if (mode === 'collector') return 'Pairs raros para portfólios · Rare portfolio-ready pairs';
-    return 'Colorways históricos curados pelo showroom · Curated heritage colorways';
-  }, [mode]);
+    if (mode === 'drop') return t.subtitle.drop;
+    if (mode === 'collector') return t.subtitle.collector;
+    return t.subtitle.showroom;
+  }, [mode, t]);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="glass-panel flex flex-col gap-4 px-6 py-5">
-        {errorMessage && (
+        {errorCode && (
           <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {errorMessage}
+            {t.errors[errorCode]}
           </p>
         )}
         <div className="flex flex-wrap items-center gap-4">
@@ -115,7 +177,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
                   : 'bg-white/10 text-white/70 hover:bg-white/20'
               }`}
             >
-              {option.label}
+              {t.modes[option.labelKey]}
             </button>
           ))}
         </div>
@@ -123,7 +185,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
         <div className="flex flex-wrap gap-3">
           <input
             className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-2 outline-none focus:border-white/40"
-            placeholder="Pesquisar modelo/colorway · Search model or colorway"
+            placeholder={t.search}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
           />
@@ -139,14 +201,14 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
                     : 'bg-white/5 text-white/60 hover:text-white'
                 }`}
               >
-                {option.label}
+                {t.lines[option.labelKey]}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {loading && <p className="text-white/60">A sincronizar stock · Syncing stock...</p>}
+      {loading && <p className="text-white/60">{t.syncing}</p>}
 
       <motion.div
         layout
@@ -158,7 +220,7 @@ export function ProductExplorer({ initialData, initialMode, errorMessage }: Prod
       </motion.div>
 
       {!loading && products.length === 0 && (
-        <p className="text-center text-white/40">Nenhum par corresponde aos filtros · No matches for these filters.</p>
+        <p className="text-center text-white/40">{t.empty}</p>
       )}
     </div>
   );
