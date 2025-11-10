@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 type CartItem = {
@@ -33,12 +34,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   return (
     <CartContext.Provider value={value}>
       {children}
-      <div className="fixed bottom-6 right-6 glass-panel px-5 py-3 text-sm shadow-2xl">
+      <Link
+        href="/bag"
+        className="fixed bottom-6 right-6 glass-panel px-5 py-3 text-sm shadow-2xl transition hover:scale-[1.02]"
+      >
         <p className="font-display text-xs uppercase tracking-[0.3em] text-white/60">Sacola</p>
         <p className="text-lg font-semibold">
           {items.length} {items.length === 1 ? 'item' : 'itens'}
         </p>
-      </div>
+      </Link>
     </CartContext.Provider>
   );
 }
